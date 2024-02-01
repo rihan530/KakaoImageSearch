@@ -3,63 +3,64 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toTopOf="@id/list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/edge"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/search_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/wearImageView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher"
-                app:layout_constraintDimensionRatio="w,1:1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/search_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/search_btn_edge"
+            android:text="검색"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/tv_from"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Daum카페"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/wearImageView" />
-
-            <TextView
-                android:id="@+id/tv_writeTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="2024-01-21 22:50:57"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_from" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        android:name="com.example.kakaoimagesearch.SearchListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="GridLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:spanCount="2"
+        tools:context=".StorageFragment"
+        tools:layout_editor_absoluteX="0dp"
+        tools:listitem="@layout/search_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,43 +1,59 @@
 package com.example.kakaoimagesearch
 
-import androidx.recyclerview.widget.RecyclerView
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.kakaoimagesearch.data.Document
+import com.example.kakaoimagesearch.databinding.SearchItemBinding
 
-import com.example.kakaoimagesearch.placeholder.PlaceholderContent.PlaceholderItem
-import com.example.kakaoimagesearch.databinding.FragmentSearchListBinding
+interface OnItemClickListener {
+    fun onItemClicked(position: Int, imageView: ImageView, drawable: Drawable)
+}
 
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
+interface DocumentItemClick {
+    fun onClick(view: View?, data: Document)
+}
+
+class MyViewHolder(val binding: SearchItemBinding) :
+    RecyclerView.ViewHolder(binding.root)
+
 class SearchRVAdapter(
-    private val values: List<PlaceholderItem>,
-) : RecyclerView.Adapter<SearchRVAdapter.ViewHolder>() {
+    private val context: Context, private val searchList: MutableList<Document>, myInterface: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    private var myClickInterface = myInterface
+    private var imageList = mutableListOf<Document>()
+    var itemClick: DocumentItemClick? = null
 
-        return ViewHolder(
-            FragmentSearchListBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return MyViewHolder(SearchItemBinding.inflate(LayoutInflater.from(parent.context), parent,false)).apply {
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val binding = (holder as MyViewHolder).binding
+        val items = searchList[position]
+        Glide.with(context)
+            .load(items.thumbnailUrl)
+            .load(items.imageUrl)
+            .dontTransform()
+            .into(binding.ivItem)
+        binding.ivItem.transitionName = items.imageUrl
+
+        binding.ivItem.setOnClickListener {
+            val drawable = binding.ivItem.drawable
+            val imageView = binding.ivItem
+            myClickInterface.onItemClicked(position, imageView, drawable!!)
+            itemClick?.onClick(it, items)
+        }
     }
 
-    override fun getItemCount(): Int = values.size
-
-    inner class ViewHolder(binding: FragmentSearchListBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
+    override fun getItemCount(): Int {
+        return searchList.size
     }
 
 }

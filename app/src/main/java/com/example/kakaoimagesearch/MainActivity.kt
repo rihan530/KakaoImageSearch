@@ -1,12 +1,18 @@
 package com.example.kakaoimagesearch
 
 import android.Manifest
+import android.content.ContentValues
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.fragment.app.commit
+import com.example.kakaoimagesearch.data.Document
+import com.example.kakaoimagesearch.data.SearchModel
 import com.example.kakaoimagesearch.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -23,9 +29,11 @@ class MainActivity : AppCompatActivity(), FragmentDataListener {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private lateinit var searchListFragment: SearchListFragment
+    private lateinit var storageFragment: StorageFragment
 
     val adapter = ViewPagerAdapter(this)
+
+    val favItems: ArrayList<SearchModel> = arrayListOf()
 
     override fun onStart() {
         super.onStart()
@@ -42,21 +50,6 @@ class MainActivity : AppCompatActivity(), FragmentDataListener {
 
         this.onBackPressedDispatcher.addCallback(this, callback)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestPermissions(arrayOf(
-                Manifest.permission.POST_NOTIFICATIONS,
-                Manifest.permission.CALL_PHONE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.READ_MEDIA_IMAGES
-            ), 0)
-        }
-
-        window.apply {
-            // 상태바의 아이콘과 배경색 변경
-            statusBarColor = Color.WHITE
-            WindowInsetsControllerCompat(this, this.decorView).isAppearanceLightStatusBars = true
-        }
-
         with(binding) {
             viewPagerMain.adapter = adapter
 
@@ -69,16 +62,17 @@ class MainActivity : AppCompatActivity(), FragmentDataListener {
         }
     }
 
-//    override fun update(position: Int) {
-//        adapter.updateLike(position)
-//    }
+    companion object {
+        const val KEY_ADD = "add_item"
+        const val KEY_DELETE = "delete_item"
+    }
 
-//    override fun onDataReceived(data: Contact.Person) {
-//        supportFragmentManager.commit {
-//            detailFragment = ContactDetailFragment.newInstance(data)
-//            replace(R.id.frame_layout_main, detailFragment)
-//            setReorderingAllowed(true)
-//            addToBackStack("")
-//        }
-//    }
+    override fun onDataReceived(data: Document) {
+        supportFragmentManager.commit {
+            storageFragment = StorageFragment.newInstance(data)
+            replace(R.id.list, storageFragment)
+            setReorderingAllowed(true)
+            addToBackStack("")
+        }
+    }
 }
