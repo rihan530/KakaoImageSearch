@@ -6,7 +6,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class ViewPagerAdapter(fragmentActivity: FragmentActivity): FragmentStateAdapter(fragmentActivity) {
 
-    private val searchListFragment = SearchListFragment()
+    private val searchFragment = SearchFragment()
     private val storageFragment = StorageFragment()
 
     override fun getItemCount(): Int {
@@ -15,7 +15,7 @@ class ViewPagerAdapter(fragmentActivity: FragmentActivity): FragmentStateAdapter
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> searchListFragment
+            0 -> searchFragment
             else -> storageFragment
         }
     }
@@ -26,6 +26,6 @@ class ViewPagerAdapter(fragmentActivity: FragmentActivity): FragmentStateAdapter
 
     //ContactListFragment의 isLiked 값 상태를 바꾸는 함수
 //    fun updateLike(position: Int) {
-//        searchListFragment.updateLike(position)
+//        searchFragment.updateLike(position)
 //    }
 }

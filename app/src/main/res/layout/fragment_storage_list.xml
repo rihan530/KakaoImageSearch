@@ -11,4 +11,4 @@
     app:layoutManager="GridLayoutManager"
     app:spanCount="2"
     tools:context=".StorageFragment"
-    tools:listitem="@layout/fragment_search_list" />
+    tools:listitem="@layout/search_item" />
