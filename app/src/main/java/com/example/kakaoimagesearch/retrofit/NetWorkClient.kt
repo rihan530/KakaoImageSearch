@@ -1,5 +1,7 @@
 package com.example.kakaoimagesearch.retrofit
 
+import com.example.kakaoimagesearch.util.Constants
+import com.google.gson.GsonBuilder
 import de.hdodenhof.circleimageview.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,26 +13,19 @@ object NetWorkClient {
 
     private const val SEARCH_BASE_URL = "https://dapi.kakao.com/v2/search/image"
 
-    private fun createOkHttpClient(): OkHttpClient {
-        val interceptor = HttpLoggingInterceptor()
+    val apiService: NetWorkInterface
+        get() = instance.create(NetWorkInterface::class.java)
 
-        if (BuildConfig.DEBUG)
-            interceptor.level = HttpLoggingInterceptor.Level.BODY
-        else
-            interceptor.level = HttpLoggingInterceptor.Level.NONE
+    // Retrofit 인스턴스를 초기화하고 반환한다.
+    private val instance: Retrofit
+        private get() {
+            // Gson 객체 생성. setLenient()는 JSON 파싱이 좀 더 유연하게 처리되도록 한다.
+            val gson = GsonBuilder().setLenient().create()
 
-        return OkHttpClient.Builder()
-            .connectTimeout(20, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
-            .writeTimeout(20, TimeUnit.SECONDS)
-            .addNetworkInterceptor(interceptor)
-            .build()
-    }
-
-    private val kakaoSearchRetrofit = Retrofit.Builder()
-        .baseUrl(SEARCH_BASE_URL).addConverterFactory(GsonConverterFactory.create()).client(
-            createOkHttpClient()
-        ).build()
-
-    val imageNetWork: NetWorkInterface = kakaoSearchRetrofit.create(NetWorkInterface::class.java)
+            // Retrofit 빌더를 사용하여 Retrofit 인스턴스 생성
+            return Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)  // 기본 URL 설정
+                .addConverterFactory(GsonConverterFactory.create(gson))  // JSON 파싱을 위한 컨버터 추가
+                .build()
+        }
 }

@@ -15,7 +15,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@color/grey"
-        app:layout_constraintBottom_toTopOf="@id/list"
+        app:layout_constraintBottom_toTopOf="@id/rvSearchList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -52,14 +52,14 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
+        android:id="@+id/rvSearchList"
         android:name="com.example.kakaoimagesearch.SearchListFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layoutManager="GridLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
         app:spanCount="2"
-        tools:context=".StorageFragment"
+        tools:context=".storage.StorageFragment"
         tools:layout_editor_absoluteX="0dp"
         tools:listitem="@layout/search_item" />
 
